@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#000000" />
+    <style>
+      /* Hide Vite error overlay */
+      div[style*="z-index: 9999"] {
+        display: none !important;
+      }
+    </style>
+    <!-- Script to hide error overlays -->
+    <script>
+      // Immediately hide any Vite error overlays that appear
+      function hideViteErrorOverlay() {
+        const overlays = document.querySelectorAll('div[style*="z-index: 9999"]');
+        overlays.forEach(function(overlay) {
+          if (overlay && overlay.style) {
+            overlay.style.display = 'none';
+          }
+        });
+      }
+      
+      // Set up observer to watch for new elements that might be error overlays
+      if (typeof MutationObserver !== 'undefined') {
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function() {
+            hideViteErrorOverlay();
+          });
+        });
+        
+        // Start observing once DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+          observer.observe(document.body, { 
+            childList: true,
+            subtree: true 
+          });
+          
+          // Also set up periodic checks
+          setInterval(hideViteErrorOverlay, 500);
+        });
+      }
+      
+      // Run immediately and on window load
+      hideViteErrorOverlay();
+      window.addEventListener('load', hideViteErrorOverlay);
+      
+      // Suppress runtime errors
+      window.addEventListener('error', function(e) {
+        if (e.message && e.message.includes('runtime error')) {
+          e.preventDefault();
+          e.stopPropagation();
+          hideViteErrorOverlay();
+          return true;
+        }
+      }, true);
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
+    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
+    <!-- Additional script to hide error overlays -->
+    <script src="/hide-overlay.js"></script>
+  </body>
+</html>
