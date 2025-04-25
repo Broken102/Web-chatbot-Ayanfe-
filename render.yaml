@@ -1,4 +1,3 @@
-
 services:
   - type: web
     name: ayanfe-ai
@@ -6,6 +5,7 @@ services:
     plan: starter
     buildCommand: |
       npm install --include=dev
+      npm install @vitejs/plugin-react --save-dev
       npm run build
     startCommand: npm start
     healthCheckPath: /api/health
